@@ -10,7 +10,7 @@
 
 **Reminder:** Ensure shockers are placed safely to avoid physical harm. Refer to the diagram below for safe placement areas. 
 
-**Never place shockers near the neck.**
+**NEVER PLACE SHOCKERS NEAR THE NECK**
 
 
 <div style="display: flex; justify-content: center;">
