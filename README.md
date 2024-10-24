@@ -1,5 +1,5 @@
 # ETS2LA-OpenShock
-### Please note that this plugin is not apart of the ETS2LA project, but it has been developed by some of the project’s maintainer's.
+### Please note that this plugin is not apart of the ETS2LA project, but has been developed by some of the project’s maintainers.
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
