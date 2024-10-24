@@ -10,7 +10,6 @@
 
 **Reminder**: Please make sure to place shockers safely to avoid any harm or discomfort. Always follow the provided safety guidelines to ensure proper use.
 
----
 
 <div style="display: flex; justify-content: center;">
     <img src="https://github.com/Cloud-121/ETS2LA-OpenShock/blob/main/assets/safety-back.png" alt="Safety Back" width="200" style="margin-right: 10px;"/>
