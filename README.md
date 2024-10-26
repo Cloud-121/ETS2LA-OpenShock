@@ -14,8 +14,8 @@
 
 
 <div style="display: flex; justify-content: center;">
-    <img src="https://github.com/Cloud-121/ETS2LA-OpenShock/blob/main/assets/safety-back.png" alt="Safety Back" width="200" style="margin-right: 10px;"/>
-    <img src="https://github.com/Cloud-121/ETS2LA-OpenShock/blob/main/assets/safety-front.png" alt="Safety Front" width="200"/>
+    <img src="https://github.com/Cloud-121/ETS2LA-OpenShock/blob/main/assets/safety-front.png" alt="Safety Front" width="200" style="margin-right: 10px;"/>
+    <img src="https://github.com/Cloud-121/ETS2LA-OpenShock/blob/main/assets/safety-back.png" alt="Safety Back" width="200"/>
 </div>
 
 *Images courtesy of PiShock.*
