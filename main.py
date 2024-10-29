@@ -6,8 +6,8 @@ import math
 class Plugin(ETS2LAPlugin):
     author = Author(
         name="Zia",
-        url="https://wiki.ets2la.com",
-        icon="https://wiki.ets2la.com/assets/favicon.ico"
+        url="https://github.com/Zia-ullah-khan",
+        icon="https://avatars.githubusercontent.com/u/88408107?s=400&v=4"
     )
     description = PluginDescription(
         name="ETS2LA-OpenShock",
@@ -53,5 +53,5 @@ class Plugin(ETS2LAPlugin):
         if distaneFromCenter is None or distaneFromCenter == "None":
             self.notify("Please Enable The Map Plugin To Use This Plugin", type="error")
             return
-        if distaneFromCenter > 1.5 or distaneFromCenter < -1.5 and blinkerLeftActive = false or blinkerRightActive = false:
+        if distaneFromCenter > 1.5 or distaneFromCenter < -1.5 and blinkerLeftActive == false or blinkerRightActive == false:
              #shock the user
