@@ -1,1 +1,12 @@
-{}
+{
+    "yolo_fps": null,
+    "apiserver": "api.openshock",
+    "api_token": "iKsI7rSRpmrD6d6VUeQctwJ35kVxdb6Bt9HxODvwRfUpbmeroyrkWJr16EMQa8Lz",
+    "deviceid": "6a7883c4-8da9-41c8-b3e2-0da695111085",
+    "vibration_offset": 1,
+    "shock_offset": 1.25,
+    "shock_duration": 300,
+    "shock_intensity": 50,
+    "vibration_duration": 300,
+    "actualapiserver": "https://api.openshock.app"
+}
