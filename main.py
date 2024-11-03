@@ -2,6 +2,7 @@ from ETS2LA.Plugin import *
 from ETS2LA.UI import *
 import time
 import math
+import requests
 
 class SettingsMenu(ETS2LASettingsMenu):
     dynamic = True
@@ -9,10 +10,8 @@ class SettingsMenu(ETS2LASettingsMenu):
 
     def render(self):
         # dynamic settings menus have access to self.plugin to access the running plugin object
-
-
-        Title("Shock me uwu")
-        Description("Get shocked uwu")
+        Title("ETS2LA OpenShock Settings")
+        Description("Change settings and other paramaters for the OpenShock plugin here")
         
         with EnabledLock(): # Will show the elements as blurred until the plugin is enabled.
             if self.plugin is not None:
@@ -37,8 +36,6 @@ class SettingsMenu(ETS2LASettingsMenu):
         with EnabledLock(): # Will show the elements as blurred until the plugin is enabled.
             if self.plugin is not None:
                 Label("Lane Offset: " + str(self.plugin.LaneOffset))
-                
-                
 
         return RenderUI()
         
@@ -56,20 +53,20 @@ class Plugin(ETS2LAPlugin):
         ), 
         Author(
             name="Zia",
-            url="https://wiki.ets2la.com",
-            icon="https://wiki.ets2la.com/assets/favicon.ico"
+            url="https://github.com/Zia-ullah-khan",
+            icon="https://avatars.githubusercontent.com/u/88408107?v=4"
         )
     ]
 
     description = PluginDescription(
         name="ETS2LA-OpenShock",
-        version="1.0.0",
+        version="2.0.0",
         description="ETS2LA and ETS2's Implementation with Open Shock",
         compatible_os=["Windows", "Linux"],
         compatible_game=["ETS2"],
         modules = ["TruckSimAPI"],
         update_log={
-            "1.0.0": "Initial release"
+            "2.0.0": "Everything is working as it should"
         }
     )
     
@@ -80,7 +77,7 @@ class Plugin(ETS2LAPlugin):
         global torch, np, OpenShockAPI
         import numpy as np
         import torch
-        from plugins.OpenShockConnect.openshocksdk import OpenShockAPI
+        from openshocksdk import OpenShockAPI
     
     def warning(self):
         if not self.warningShown:
@@ -103,61 +100,43 @@ class Plugin(ETS2LAPlugin):
         self.warning()
         if self.makeconnection == False:
             try:
-                apiserver = ""
                 apiserver = self.settings.apiserver
                 if apiserver == "api.openshock":
                     self.settings.actualapiserver = "https://api.openshock.app"
                     server = "https://api.openshock.app"
                 elif apiserver == "Custom":
-                    print("UNSUPPORTED")
+                    self.notify("You are using an unsupported API Server please change your api server to api.openshock", type="error")
                 
-                api_token = ""
                 api_token = self.settings.api_token
-
                 openshock = OpenShockAPI(token=api_token, base_url=server)
                 self.makeconnection = True
                 shockers = openshock.list_shockers()
 
                 for shocker in shockers:
                     self.shocker_ids.append(shocker['device_id'])
-
-
-
-                
-                
-
-                
-
-                
-
                 self.connectstate = "Connected"
+            except requests.exceptions.HTTPError as e:
+                self.connectstate = "Not Connected"
+                if e.response.status_code == 401:
+                    self.notify("Invalid API Token", type="error")
+                else:
+                    print(e)
+                    self.connectstate = "Not Connected"
             except Exception as e:
                 print(e)
                 self.connectstate = "Not Connected"
-
-            
-        
-
-
-
-
+                               
         api_values = self.modules.TruckSimAPI.run()
 
         distaneFromCenter = self.globals.tags.lateral_offset
 
         self.LaneOffset = distaneFromCenter
         if distaneFromCenter == "None":
-            distaneFromCenter = 0
-
-
-        
+            distaneFromCenter = 0   
         #Shocking :3
-
         #Setting some values
         blinkeractive = False
-
         #Get values
-
         shocker_id = self.settings.deviceid
         viblaneoffset = self.settings.vibration_offset
         vibduration = self.settings.vibration_duration
@@ -165,16 +144,12 @@ class Plugin(ETS2LAPlugin):
         shockduration = self.settings.shock_duration
         shockintensity = self.settings.shock_intensity
         if api_values["truckBool"]["blinkerLeftActive"] == True or api_values["truckBool"]["blinkerRightActive"] == True:
-            blinkeractive = True
-
+            blinkeractive = True           
         #Check for vibration
         try:
-
             if distaneFromCenter != "None":
                 distaneFromCenter = abs(distaneFromCenter['Map'])
-
-                if self.connectstate == "Connected":
-                    
+                if self.connectstate == "Connected":                    
                     if (distaneFromCenter > shocklaneoffset) and blinkeractive == False:
                             openshock = OpenShockAPI(token=self.settings.api_token, base_url=self.settings.actualapiserver)
                             shocks = [{
@@ -185,11 +160,8 @@ class Plugin(ETS2LAPlugin):
                                 "exclusive": True
                             }]
                             response = openshock.control_device(shocks=shocks, custom_name="Exit Lane Shock")
-
-                            print("Shocked")
-
-
-
+                            print(openshock)
+                            print("Shocked")                       
                     elif (distaneFromCenter > viblaneoffset ) and blinkeractive == False:
                             openshock = OpenShockAPI(token=self.settings.api_token, base_url=self.settings.actualapiserver)
                             shocks = [{
@@ -201,10 +173,10 @@ class Plugin(ETS2LAPlugin):
                             }]
                             response = openshock.control_device(shocks=shocks, custom_name="Exit Lane Vibration")
 
-                            print("Vibrated")
-
-
-                
+                            print("Vibrated")                        
         except Exception as e:
-            print(e)
-            
+            if "NoneType" in str(e):
+                time.sleep(1)
+                self.notify("Please Enable the map plugin", type="error")
+            else:
+                print(e)            
