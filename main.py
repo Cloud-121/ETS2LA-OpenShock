@@ -18,8 +18,8 @@ class SettingsMenu(ETS2LASettingsMenu):
                 Label("Connection Status: " + str(self.plugin.connectstate))
 
         Separator()
-        Selector("OpenShock Api Sever", "apiserver", "api.openshock", ["api.openshock", "Custom"], description="The OpenShock API Server to connect to", requires_restart=True)
-        Input("OpenShock Api Token", "api_token", "number", "", description="The OpenShock API Token to use", requires_restart=True)
+        Input("OpenShock Api URL", "base_url", "string", "https://api.openshock.app", description="The base URL of the OpenShock API", requires_restart=True)
+        Input("OpenShock Api Token", "api_token", "string", "", description="The OpenShock API Token to use", requires_restart=True)
 
         with EnabledLock(): # Will show the elements as blurred until the plugin is enabled.
             if self.plugin is not None:
@@ -77,7 +77,7 @@ class Plugin(ETS2LAPlugin):
         global torch, np, OpenShockAPI
         import numpy as np
         import torch
-        from openshocksdk import OpenShockAPI
+        from plugins.OpenShockConnect.openshocksdk import OpenShockAPI
     
     def warning(self):
         if not self.warningShown:
@@ -100,12 +100,8 @@ class Plugin(ETS2LAPlugin):
         self.warning()
         if self.makeconnection == False:
             try:
-                apiserver = self.settings.apiserver
-                if apiserver == "api.openshock":
-                    self.settings.actualapiserver = "https://api.openshock.app"
-                    server = "https://api.openshock.app"
-                elif apiserver == "Custom":
-                    self.notify("You are using an unsupported API Server please change your api server to api.openshock", type="error")
+                apiserver = self.settings.base_url
+                server = apiserver
                 
                 api_token = self.settings.api_token
                 openshock = OpenShockAPI(token=api_token, base_url=server)
@@ -151,7 +147,7 @@ class Plugin(ETS2LAPlugin):
                 distaneFromCenter = abs(distaneFromCenter['Map'])
                 if self.connectstate == "Connected":                    
                     if (distaneFromCenter > shocklaneoffset) and blinkeractive == False:
-                            openshock = OpenShockAPI(token=self.settings.api_token, base_url=self.settings.actualapiserver)
+                            openshock = OpenShockAPI(token=self.settings.api_token, base_url=self.settings.base_url)
                             shocks = [{
                                 "id": shocker_id,
                                 "type": "Shock",
@@ -163,7 +159,7 @@ class Plugin(ETS2LAPlugin):
                             print(openshock)
                             print("Shocked")                       
                     elif (distaneFromCenter > viblaneoffset ) and blinkeractive == False:
-                            openshock = OpenShockAPI(token=self.settings.api_token, base_url=self.settings.actualapiserver)
+                            openshock = OpenShockAPI(token=self.settings.api_token, base_url=self.settings.base_url)
                             shocks = [{
                                 "id": shocker_id,
                                 "type": "Vibrate",
